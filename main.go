@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/vitoraalmeida/silkroad/entity"
 	"github.com/vitoraalmeida/silkroad/usecase/category"
+	"github.com/vitoraalmeida/silkroad/usecase/checkout"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
 	"github.com/vitoraalmeida/silkroad/usecase/sale"
 	"github.com/vitoraalmeida/silkroad/usecase/saleitem"
@@ -106,34 +107,21 @@ func main() {
 		fmt.Printf("%+v\n", s)
 	}
 
-	fmt.Println("\n\nLista itens de venda ------------------------------------\n")
-	fmt.Println("\n\nCarrinho -----------------------------------\n")
+	fmt.Println("\n\nCarrinho 1 -----------------------------------\n")
 
-	ci1 := CartItem{1, 3, 300.00}
-	ci2 := CartItem{2, 5, 350.00}
-	ci3 := CartItem{3, 4, 400.00}
-	cart := &Cart{ci1, ci2, ci3}
+	ci1 := checkout.CartItem{1, 3, 300.00}
+	ci2 := checkout.CartItem{2, 5, 350.00}
+	ci3 := checkout.CartItem{3, 4, 400.00}
+	cart := &checkout.Cart{ci1, ci2, ci3}
 	fmt.Printf("Cart: %+v", cart)
+
+	// instantiate checkout ------------------------------------------------------
 	inmemSaleItem := saleitem.NewInmem()
 	sis := saleitem.NewService(inmemSaleItem)
+	chs := checkout.NewService(ss, sis)
 
-	totalAmount := 0.00
-	for _, ci := range *cart {
-		totalAmount += ci.Subtotal
-	}
-	fmt.Println("\nTotal price: ", totalAmount)
-
-	saleId, err = ss.CreateSale(1, totalAmount)
-	if err != nil {
-		fmt.Println("Could not create Sale")
-		return
-	}
-	fmt.Println("SaleId: ", saleId)
-
-	for _, ci := range *cart {
-		id, _ := sis.CreateSaleItem(saleId, ci.ProductID, ci.Quantity, ci.Subtotal)
-		fmt.Println(id)
-	}
+	fmt.Println("\n\nCheckout 1 --------------------------------------------------")
+	chs.Checkout(cart, 1)
 
 	fmt.Println("SaleItems: \n")
 	items, _ := sis.ListSaleItems()
@@ -153,31 +141,16 @@ func main() {
 		fmt.Printf("%+v\n", si)
 	}
 
-	fmt.Println("\n\nCart 2 --------------")
-	ci1 = CartItem{1, 3, 300.00}
-	ci2 = CartItem{2, 5, 350.00}
-	ci3 = CartItem{3, 4, 120.00}
-	ci4 := CartItem{1, 2, 200.00}
-	cart = &Cart{ci1, ci2, ci3, ci4}
+	fmt.Println("\n\nCarrinho 2 -----------------------------------\n")
+
+	ci1 = checkout.CartItem{1, 3, 300.00}
+	ci2 = checkout.CartItem{2, 5, 350.00}
+	ci3 = checkout.CartItem{3, 4, 120.00}
+	ci4 := checkout.CartItem{1, 2, 200.00}
+	cart = &checkout.Cart{ci1, ci2, ci3, ci4}
 	fmt.Printf("Cart: %+v", cart)
 
-	totalAmount = 0.00
-	for _, ci := range *cart {
-		totalAmount += ci.Subtotal
-	}
-	fmt.Println("\nTotal price: ", totalAmount)
-
-	saleId, err = ss.CreateSale(1, totalAmount)
-	if err != nil {
-		fmt.Println("Could not create Sale")
-		return
-	}
-	fmt.Println("SaleId: ", saleId)
-
-	for _, ci := range *cart {
-		id, _ := sis.CreateSaleItem(saleId, ci.ProductID, ci.Quantity, ci.Subtotal)
-		fmt.Println(id)
-	}
+	chs.Checkout(cart, 2)
 
 	fmt.Println("SaleItems: \n")
 	items, _ = sis.ListSaleItems()
