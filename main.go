@@ -6,6 +6,7 @@ import (
 	"github.com/vitoraalmeida/silkroad/usecase/category"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
 	"github.com/vitoraalmeida/silkroad/usecase/sale"
+	"github.com/vitoraalmeida/silkroad/usecase/saleitem"
 )
 
 type CartItem struct {
@@ -83,14 +84,6 @@ func main() {
 		fmt.Printf("%+v\n", p)
 	}
 
-	fmt.Println("\n\nCarrinho -----------------------------------\n")
-
-	ci1 := CartItem{1, 3, 300.00}
-	ci2 := CartItem{2, 5, 350.00}
-	ci3 := CartItem{3, 4, 400.00}
-	cart := &Cart{ci1, ci2, ci3}
-	fmt.Printf("Cart: %+v", cart)
-
 	fmt.Println("\n\nLista de vendas ------------------------------------\n")
 
 	inmemSale := sale.NewInmem()
@@ -109,6 +102,47 @@ func main() {
 	fmt.Println("SaleId: ", saleId)
 
 	sales, _ := ss.ListSales()
+	for _, s := range sales {
+		fmt.Printf("%+v\n", s)
+	}
+
+	fmt.Println("\n\nLista itens de venda ------------------------------------\n")
+	fmt.Println("\n\nCarrinho -----------------------------------\n")
+
+	ci1 := CartItem{1, 3, 300.00}
+	ci2 := CartItem{2, 5, 350.00}
+	ci3 := CartItem{3, 4, 400.00}
+	cart := &Cart{ci1, ci2, ci3}
+	fmt.Printf("Cart: %+v", cart)
+	inmemSaleItem := saleitem.NewInmem()
+	sis := saleitem.NewService(inmemSaleItem)
+
+	totalAmount := 0.00
+	for _, ci := range *cart {
+		totalAmount += ci.Subtotal
+	}
+	fmt.Println("\nTotal price: ", totalAmount)
+
+	saleId, err = ss.CreateSale(1, totalAmount)
+	if err != nil {
+		fmt.Println("Could not create Sale")
+		return
+	}
+	fmt.Println("SaleId: ", saleId)
+
+	for _, ci := range *cart {
+		id, _ := sis.CreateSaleItem(saleId, ci.ProductID, ci.Quantity, ci.Subtotal)
+		fmt.Println(id)
+	}
+
+	fmt.Println("SaleItems: \n")
+	items, _ := sis.ListSaleItems()
+	for _, i := range items {
+		fmt.Printf("%+v\n", i)
+	}
+
+	fmt.Println("\nSales: \n")
+	sales, _ = ss.ListSales()
 	for _, s := range sales {
 		fmt.Printf("%+v\n", s)
 	}
