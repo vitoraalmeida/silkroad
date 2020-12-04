@@ -25,7 +25,7 @@ type UseCase interface {
 	GetSaleItem(id uint) (*entity.SaleItem, error)
 	ListSaleItems() ([]*entity.SaleItem, error)
 	SearchItemsBySaleID(saleID uint) ([]*entity.SaleItem, error)
-	CreateSaleItem(name string) (uint, error)
+	CreateSaleItem(saleID uint, productID uint, quantity uint, itemAmount float64) (uint, error)
 	UpdateSaleItem(e *entity.SaleItem) error
 	DeleteSaleItem(id uint) error
 }
