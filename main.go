@@ -147,4 +147,53 @@ func main() {
 		fmt.Printf("%+v\n", s)
 	}
 
+	fmt.Println("\nSale3's items: \n")
+	sale3Items, _ := sis.SearchItemsBySaleID(3)
+	for _, si := range sale3Items {
+		fmt.Printf("%+v\n", si)
+	}
+
+	fmt.Println("\n\nCart 2 --------------")
+	ci1 = CartItem{1, 3, 300.00}
+	ci2 = CartItem{2, 5, 350.00}
+	ci3 = CartItem{3, 4, 120.00}
+	ci4 := CartItem{1, 2, 200.00}
+	cart = &Cart{ci1, ci2, ci3, ci4}
+	fmt.Printf("Cart: %+v", cart)
+
+	totalAmount = 0.00
+	for _, ci := range *cart {
+		totalAmount += ci.Subtotal
+	}
+	fmt.Println("\nTotal price: ", totalAmount)
+
+	saleId, err = ss.CreateSale(1, totalAmount)
+	if err != nil {
+		fmt.Println("Could not create Sale")
+		return
+	}
+	fmt.Println("SaleId: ", saleId)
+
+	for _, ci := range *cart {
+		id, _ := sis.CreateSaleItem(saleId, ci.ProductID, ci.Quantity, ci.Subtotal)
+		fmt.Println(id)
+	}
+
+	fmt.Println("SaleItems: \n")
+	items, _ = sis.ListSaleItems()
+	for _, i := range items {
+		fmt.Printf("%+v\n", i)
+	}
+
+	fmt.Println("\nSales: \n")
+	sales, _ = ss.ListSales()
+	for _, s := range sales {
+		fmt.Printf("%+v\n", s)
+	}
+
+	fmt.Println("\nSale4's items: \n")
+	sale3Items, _ = sis.SearchItemsBySaleID(4)
+	for _, si := range sale3Items {
+		fmt.Printf("%+v\n", si)
+	}
 }

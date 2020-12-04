@@ -19,7 +19,7 @@ func NewService(r Repository) *Service {
 	}
 }
 
-//CreateCategory create a saleitem
+//CreateSaleItem create a saleitem
 func (s *Service) CreateSaleItem(saleID uint, productID uint, quantity uint, itemAmount float64) (uint, error) {
 	b, err := entity.NewSaleItem(saleID, productID, quantity, itemAmount)
 	if err != nil {
@@ -30,7 +30,7 @@ func (s *Service) CreateSaleItem(saleID uint, productID uint, quantity uint, ite
 	return s.repo.Create(b)
 }
 
-//GetCategory get a saleitem
+//GetSaleItem get a saleitem
 func (s *Service) GetSaleItem(id uint) (*entity.SaleItem, error) {
 	b, err := s.repo.Get(id)
 	if b == nil {
@@ -43,19 +43,19 @@ func (s *Service) GetSaleItem(id uint) (*entity.SaleItem, error) {
 	return b, nil
 }
 
-//SearchCategorys search sales
-//func (s *Service) SearchSaleItems(customerID uint) ([]*entity.SaleItem, error) {
-//	sales, err := s.repo.Search(customerID)
-//	if err != nil {
-//		return nil, err
-//	}
-//	if len(sales) == 0 {
-//		return nil, entity.ErrNotFound
-//	}
-//	return sales, nil
-//}
+//SearchSalesItems search sale items by saleID
+func (s *Service) SearchItemsBySaleID(saleID uint) ([]*entity.SaleItem, error) {
+	sales, err := s.repo.SearchBySaleID(saleID)
+	if err != nil {
+		return nil, err
+	}
+	if len(sales) == 0 {
+		return nil, entity.ErrNotFound
+	}
+	return sales, nil
+}
 
-//ListCategorys list sales
+//ListSaleItems list sales
 func (s *Service) ListSaleItems() ([]*entity.SaleItem, error) {
 	sales, err := s.repo.List()
 	if err != nil {
@@ -67,7 +67,7 @@ func (s *Service) ListSaleItems() ([]*entity.SaleItem, error) {
 	return sales, nil
 }
 
-//DeleteCategory Delete a saleitem
+//DeleteSaleItem Delete a saleitem
 func (s *Service) DeleteSaleItem(id uint) error {
 	_, err := s.GetSaleItem(id)
 	if err != nil {
@@ -76,7 +76,7 @@ func (s *Service) DeleteSaleItem(id uint) error {
 	return s.repo.Delete(id)
 }
 
-//UpdateCategory Update a saleitem
+//UpdateSaleItem Update a saleitem
 func (s *Service) UpdateSaleItem(e *entity.SaleItem) error {
 	err := e.Validate()
 	if err != nil {

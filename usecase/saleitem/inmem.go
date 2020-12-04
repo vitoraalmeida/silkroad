@@ -41,16 +41,16 @@ func (r *inmem) Update(e *entity.SaleItem) error {
 	return nil
 }
 
-//Search saleitem
-//func (r *inmem) Search(id uint) ([]*entity.SaleItem, error) {
-//	var d []*entity.SaleItem
-//	for _, j := range r.m {
-//		if id == j.ID {
-//			d = append(d, j)
-//		}
-//	}
-//	return d, nil
-//}
+//Search saleitem by saleID
+func (r *inmem) SearchBySaleID(saleID uint) ([]*entity.SaleItem, error) {
+	var d []*entity.SaleItem
+	for _, j := range r.m {
+		if saleID == j.SaleID {
+			d = append(d, j)
+		}
+	}
+	return d, nil
+}
 
 //List saleitem
 func (r *inmem) List() ([]*entity.SaleItem, error) {
