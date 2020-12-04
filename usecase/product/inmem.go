@@ -1,4 +1,4 @@
-package category
+package product
 
 import (
 	"strings"
@@ -8,33 +8,33 @@ import (
 
 //inmem in memory repo
 type inmem struct {
-	m map[uint]*entity.Category
+	m map[uint]*entity.Product
 }
 
 //newInmem create new repository
 func NewInmem() *inmem {
-	var m = map[uint]*entity.Category{}
+	var m = map[uint]*entity.Product{}
 	return &inmem{
 		m: m,
 	}
 }
 
-//Create a category
-func (r *inmem) Create(e *entity.Category) (uint, error) {
+//Create a product
+func (r *inmem) Create(e *entity.Product) (uint, error) {
 	r.m[e.ID] = e
 	return e.ID, nil
 }
 
-//Get a category
-func (r *inmem) Get(id uint) (*entity.Category, error) {
+//Get a product
+func (r *inmem) Get(id uint) (*entity.Product, error) {
 	if r.m[id] == nil {
 		return nil, entity.ErrNotFound
 	}
 	return r.m[id], nil
 }
 
-//Update a category
-func (r *inmem) Update(e *entity.Category) error {
+//Update a product
+func (r *inmem) Update(e *entity.Product) error {
 	_, err := r.Get(e.ID)
 	if err != nil {
 		return err
@@ -43,9 +43,9 @@ func (r *inmem) Update(e *entity.Category) error {
 	return nil
 }
 
-//Search categories
-func (r *inmem) Search(query string) ([]*entity.Category, error) {
-	var d []*entity.Category
+//Search products
+func (r *inmem) Search(query string) ([]*entity.Product, error) {
+	var d []*entity.Product
 	for _, j := range r.m {
 		if strings.Contains(strings.ToLower(j.Name), query) {
 			d = append(d, j)
@@ -54,9 +54,9 @@ func (r *inmem) Search(query string) ([]*entity.Category, error) {
 	return d, nil
 }
 
-//List categories
-func (r *inmem) List() ([]*entity.Category, error) {
-	var d []*entity.Category
+//List products
+func (r *inmem) List() ([]*entity.Product, error) {
+	var d []*entity.Product
 	for _, j := range r.m {
 		if j == nil {
 			continue
@@ -66,7 +66,7 @@ func (r *inmem) List() ([]*entity.Category, error) {
 	return d, nil
 }
 
-//Delete a category
+//Delete a product
 func (r *inmem) Delete(id uint) error {
 	if r.m[id] == nil {
 		return entity.ErrNotFound
