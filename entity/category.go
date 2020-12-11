@@ -4,8 +4,6 @@ import (
 	"time"
 )
 
-var createID uint = 1
-
 type Category struct {
 	ID        uint
 	Name      string
@@ -15,11 +13,9 @@ type Category struct {
 
 func NewCategory(name string) (*Category, error) {
 	c := &Category{
-		ID:        createID,
 		Name:      name,
 		CreatedAt: time.Now(),
 	}
-	createID = createID + 1
 	err := c.Validate()
 	if err != nil {
 		return nil, ErrInvalidEntity

@@ -7,7 +7,7 @@ import (
 	"github.com/vitoraalmeida/silkroad/entity"
 )
 
-//Service book usecase
+//Service category usecase
 type Service struct {
 	repo Repository
 }
@@ -19,26 +19,26 @@ func NewService(r Repository) *Service {
 	}
 }
 
-//CreateCategory create a book
+//CreateCategory create a category
 func (s *Service) CreateCategory(name string) (uint, error) {
-	b, err := entity.NewCategory(name)
+	c, err := entity.NewCategory(name)
 	if err != nil {
-		return b.ID, err
+		return c.ID, err
 	}
-	return s.repo.Create(b)
+	return s.repo.Create(c)
 }
 
-//GetCategory get a book
+//GetCategory get a category
 func (s *Service) GetCategory(id uint) (*entity.Category, error) {
-	b, err := s.repo.Get(id)
-	if b == nil {
+	c, err := s.repo.Get(id)
+	if c == nil {
 		return nil, entity.ErrNotFound
 	}
 	if err != nil {
 		return nil, err
 	}
 
-	return b, nil
+	return c, nil
 }
 
 //SearchCategorys search categories
@@ -65,7 +65,7 @@ func (s *Service) ListCategories() ([]*entity.Category, error) {
 	return categories, nil
 }
 
-//DeleteCategory Delete a book
+//DeleteCategory Delete a category
 func (s *Service) DeleteCategory(id uint) error {
 	_, err := s.GetCategory(id)
 	if err != nil {
@@ -74,7 +74,7 @@ func (s *Service) DeleteCategory(id uint) error {
 	return s.repo.Delete(id)
 }
 
-//UpdateCategory Update a book
+//UpdateCategory Update a category
 func (s *Service) UpdateCategory(e *entity.Category) error {
 	err := e.Validate()
 	if err != nil {
