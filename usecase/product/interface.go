@@ -14,6 +14,7 @@ type Writer interface {
 	Create(e *entity.Product) (uint, error)
 	Update(e *entity.Product) error
 	Delete(id uint) error
+	DecrementStock(id, quantity uint) error
 }
 
 type Repository interface {
@@ -25,7 +26,8 @@ type UseCase interface {
 	GetProduct(id uint) (*entity.Product, error)
 	SearchProducts(query string) ([]*entity.Product, error)
 	ListProducts() ([]*entity.Product, error)
-	CreateProduct(name string) (uint, error)
+	CreateProduct(name string, categoryID uint, price float64, stock uint, available bool) (uint, error)
 	UpdateProduct(e *entity.Product) error
 	DeleteProduct(id uint) error
+	DecrementProductStock(id, quantity uint) error
 }

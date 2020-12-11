@@ -1,6 +1,7 @@
 package product
 
 import (
+	"errors"
 	"strings"
 	"time"
 
@@ -18,6 +19,8 @@ func NewService(r Repository) *Service {
 		repo: r,
 	}
 }
+
+var ErrProductOutOfStock = errors.New("Out of stock")
 
 //CreateCategory create a book
 func (s *Service) CreateProduct(name string, categoryID uint, price float64, stock uint, available bool) (uint, error) {
@@ -82,4 +85,15 @@ func (s *Service) UpdateProduct(e *entity.Product) error {
 	}
 	e.UpdatedAt = time.Now()
 	return s.repo.Update(e)
+}
+
+func (s *Service) DecrementProductStock(id, quantity uint) error {
+	p, err := s.repo.Get(id)
+	if err != nil {
+		return err
+	}
+	if p.Stock-quantity < 0 {
+		return ErrProductOutOfStock
+	}
+	return s.repo.DecrementStock(id, quantity)
 }

@@ -74,3 +74,11 @@ func (r *inmem) Delete(id uint) error {
 	r.m[id] = nil
 	return nil
 }
+
+func (r *inmem) DecrementStock(id, quantity uint) error {
+	if r.m[id] == nil {
+		return entity.ErrNotFound
+	}
+	r.m[id].Stock -= quantity
+	return nil
+}
