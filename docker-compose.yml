@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "silkroad"
+      POSTGRES_USER: "silkroad"
+      POSTGRES_DB: "silkroad"
+    ports:
+      - "15432:5432"
+    volumes:
+      - ./ops/db/init.sql:/docker-entrypoint-initdb.d/init.sql
