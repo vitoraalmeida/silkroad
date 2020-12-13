@@ -7,13 +7,14 @@ import (
 	_ "github.com/lib/pq"
 	"log"
 	"os"
+	"time"
 
-	_ "github.com/vitoraalmeida/silkroad/entity"
+	"github.com/vitoraalmeida/silkroad/entity"
 	"github.com/vitoraalmeida/silkroad/infra/repository"
 	"github.com/vitoraalmeida/silkroad/usecase/category"
 	_ "github.com/vitoraalmeida/silkroad/usecase/checkout"
 	_ "github.com/vitoraalmeida/silkroad/usecase/customer"
-	_ "github.com/vitoraalmeida/silkroad/usecase/product"
+	"github.com/vitoraalmeida/silkroad/usecase/product"
 	_ "github.com/vitoraalmeida/silkroad/usecase/sale"
 	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
 )
@@ -51,8 +52,8 @@ func main() {
 	cr := repository.NewCategoryPQSL(db)
 	cs := category.NewService(cr)
 	// product
-	//ip := product.NewInmem()
-	//ps := product.NewService(ip)
+	pr := repository.NewProductPQSL(db)
+	ps := product.NewService(pr)
 	//// sale
 	//inmemSale := sale.NewInmem()
 	//ss := sale.NewService(inmemSale)
@@ -124,12 +125,13 @@ func main() {
 	}
 
 	//// ------------------------------- Produtos -----------------------------------
-	//fmt.Println("\n-------------------------- Products ---------------------------------\n")
+	fmt.Println("\n-------------------------- Products ---------------------------------\n")
 
-	//fmt.Println(ps.CreateProduct("O Capital Volume 1", 1, 60.00, 10, true))
-	//fmt.Println(ps.CreateProduct("O Capital Volume 2", 1, 70.00, 10, true))
+	fmt.Println(ps.CreateProduct("O Capital Volume 1", 2, 60.00, 10, true))
+	fmt.Println(ps.CreateProduct("O Capital Volume 2", 2, 70.00, 10, true))
+	fmt.Println(ps.CreateProduct("O Capital Volume 3", 2, 70.00, 50, true))
 
-	//fmt.Println(ps.GetProduct(1))
+	fmt.Println(ps.GetProduct(1))
 
 	//fmt.Println(ps.CreateProduct("Capital Inicial M", 2, 30.00, 10, true))
 
@@ -139,35 +141,60 @@ func main() {
 	//	fmt.Printf("%+v\n", p)
 	//}
 
-	//fmt.Println("\n-------------------------- All Products ---------------------------------\n")
-	//products, _ := ps.ListProducts()
-	//for _, p := range products {
-	//	fmt.Printf("%+v\n", p)
-	//}
+	fmt.Println("\n-------------------------- All Products ---------------------------------\n")
+	products, err := ps.ListProducts()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for _, p := range products {
+		fmt.Printf("%+v\n", p)
+	}
 
-	//capital, _ := ps.GetProduct(1)
-	//changedCapital := &entity.Product{
-	//	ID:         1,
-	//	Name:       "Das Kapital",
-	//	CategoryID: 1,
-	//	Price:      100.00,
-	//	Stock:      5,
-	//	Available:  true,
-	//	CreatedAt:  capital.CreatedAt,
-	//}
-	//fmt.Printf("\n----- Updating Product\n %+v\n\n to\n\n %+v\n", capital, changedCapital)
+	fmt.Println("\n-------------------------- Updating Product ------------------------------\n")
+	capital, _ := ps.GetProduct(1)
+	changedCapital := &entity.Product{
+		ID:         1,
+		Name:       "Das Kapital",
+		CategoryID: 2,
+		Price:      100.00,
+		Stock:      5,
+		Available:  true,
+		CreatedAt:  capital.CreatedAt,
+	}
+	fmt.Printf("Updating\n\n%+v\n\nto\n\n %+v\n", capital, changedCapital)
 
-	//err = ps.UpdateProduct(changedCapital)
-	//if err != nil {
-	//	fmt.Println("Not changed")
-	//}
+	time.Sleep(5 * time.Second)
+	err = ps.UpdateProduct(changedCapital)
+	if err != nil {
+		fmt.Println("Not changed")
+	}
 
-	//fmt.Println("\n-------------------------- All Products ---------------------------------\n")
-	//products, _ = ps.ListProducts()
-	//for _, p := range products {
-	//	fmt.Printf("%+v\n", p)
-	//}
+	fmt.Println("\n-------------------------- All Products ---------------------------------\n")
+	products, _ = ps.ListProducts()
+	for _, p := range products {
+		fmt.Printf("%+v\n", p)
+	}
 
+	fmt.Println("\n-------------------------- Decrementing product --------------------------------\n")
+	fmt.Println(ps.GetProduct(1))
+	err = ps.DecrementProductStock(1, 5)
+	err = ps.DeleteProduct(2)
+
+	fmt.Println("\n-------------------------- All Products ---------------------------------\n")
+	products, _ = ps.ListProducts()
+	for _, p := range products {
+		fmt.Printf("%+v\n", p)
+	}
+
+	fmt.Println("todos que contenham 'apital'")
+	products, err = ps.SearchProducts("apital")
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, v := range products {
+		fmt.Printf("%v\n", v)
+	}
 	//fmt.Println("\n\n----------------------- Lista de vendas ------------------------------------\n")
 
 	//sales, _ := ss.ListSales()
