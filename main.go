@@ -13,7 +13,7 @@ import (
 	"github.com/vitoraalmeida/silkroad/infra/repository"
 	"github.com/vitoraalmeida/silkroad/usecase/category"
 	_ "github.com/vitoraalmeida/silkroad/usecase/checkout"
-	_ "github.com/vitoraalmeida/silkroad/usecase/customer"
+	"github.com/vitoraalmeida/silkroad/usecase/customer"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
 	_ "github.com/vitoraalmeida/silkroad/usecase/sale"
 	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
@@ -48,18 +48,17 @@ func main() {
 	defer db.Close()
 
 	// category
-	//ic := category.NewInmem()
 	cr := repository.NewCategoryPQSL(db)
 	cs := category.NewService(cr)
 	// product
 	pr := repository.NewProductPQSL(db)
 	ps := product.NewService(pr)
-	//// sale
+	// sale
 	//inmemSale := sale.NewInmem()
 	//ss := sale.NewService(inmemSale)
-	//// customer
-	//inmemCustomer := customer.NewInmem()
-	//css := customer.NewService(inmemCustomer)
+	// customer
+	csr := repository.NewCustomerPQSL(db)
+	css := customer.NewService(csr)
 	//// saleitem
 	//inmemSaleItem := saleitem.NewInmem()
 	//sis := saleitem.NewService(inmemSaleItem)
@@ -195,6 +194,52 @@ func main() {
 	for _, v := range products {
 		fmt.Printf("%v\n", v)
 	}
+
+	fmt.Println("\n\n------------------------- Customers --------------------------------------\n")
+	fmt.Println(css.CreateCustomer("Vitor", "vitor@mail.com", "66666666666", "asenha"))
+	fmt.Println(css.CreateCustomer("Ana", "ana@mail.com", "77777777777", "asenha"))
+
+	fmt.Println(css.GetCustomer(1))
+
+	fmt.Println("\n\n------------------------- All Customers --------------------------------------\n")
+	customers, _ := css.ListCustomers()
+	for _, p := range customers {
+		fmt.Printf("%+v\n", p)
+	}
+
+	fmt.Println("\n-------------------------- Updating Customer ------------------------------\n")
+	customer, _ := css.GetCustomer(1)
+	changedCustomer := &entity.Customer{
+		ID:        1,
+		Name:      "Vitor Almeida",
+		Email:     "vitor@gmail.com",
+		CPF:       "66666666666",
+		Password:  "asenha2",
+		CreatedAt: customer.CreatedAt,
+	}
+	fmt.Printf("Updating\n\n%+v\n\nto\n\n %+v\n", customer, changedCustomer)
+
+	time.Sleep(5 * time.Second)
+	err = css.UpdateCustomer(changedCustomer)
+	if err != nil {
+		fmt.Println("Not changed")
+	}
+
+	fmt.Println("\n\n------------------------- All Customers --------------------------------------\n")
+	customers, _ = css.ListCustomers()
+	for _, p := range customers {
+		fmt.Printf("%+v\n", p)
+	}
+
+	fmt.Println("\n\n------------------------- Delete Customer --------------------------------------\n")
+	err = css.DeleteCustomer(1)
+
+	fmt.Println("\n\n------------------------- All Customers --------------------------------------\n")
+	customers, _ = css.ListCustomers()
+	for _, p := range customers {
+		fmt.Printf("%+v\n", p)
+	}
+
 	//fmt.Println("\n\n----------------------- Lista de vendas ------------------------------------\n")
 
 	//sales, _ := ss.ListSales()

@@ -21,6 +21,16 @@ CREATE TABLE IF NOT EXISTS product (
         REFERENCES category (id)
 );
 
+CREATE TABLE IF NOT EXISTS customer (
+    id serial CONSTRAINT pk_id_customer PRIMARY KEY,
+    name text NOT NULL,
+    email text UNIQUE NOT NULL,
+    cpf text UNIQUE NOT NULL,
+    password text NOT NULL,
+    created_at  timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at  timestamp with time zone NOT NULL DEFAULT now()
+);
+
 
 CREATE OR REPLACE FUNCTION trigger_update_timestamp()
 RETURNS TRIGGER AS $$
@@ -40,3 +50,7 @@ BEFORE UPDATE ON product
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_update_timestamp();
 
+CREATE TRIGGER update_timestamp_customer
+BEFORE UPDATE ON customer
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_update_timestamp();

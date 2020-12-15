@@ -20,7 +20,7 @@ func NewService(r Repository) *Service {
 	}
 }
 
-//CreateCategory create a customer
+//CreateCustomer create a customer
 func (s *Service) CreateCustomer(name, email, cpf, password string) (uint, error) {
 	//validar email (unico), cpf, senha
 	b, err := entity.NewCustomer(name, email, cpf, password)
@@ -32,7 +32,7 @@ func (s *Service) CreateCustomer(name, email, cpf, password string) (uint, error
 	return s.repo.Create(b)
 }
 
-//GetCategory get a customer
+//GetCustomer get a customer
 func (s *Service) GetCustomer(id uint) (*entity.Customer, error) {
 	b, err := s.repo.Get(id)
 	if b == nil {
@@ -45,7 +45,7 @@ func (s *Service) GetCustomer(id uint) (*entity.Customer, error) {
 	return b, nil
 }
 
-//SearchCategorys search sales
+//SearchCustomers search sales
 func (s *Service) SearchCustomers(name string) ([]*entity.Customer, error) {
 	sales, err := s.repo.Search(name)
 	if err != nil {
@@ -57,7 +57,7 @@ func (s *Service) SearchCustomers(name string) ([]*entity.Customer, error) {
 	return sales, nil
 }
 
-//ListCategorys list sales
+//ListCustomers list sales
 func (s *Service) ListCustomers() ([]*entity.Customer, error) {
 	sales, err := s.repo.List()
 	if err != nil {
@@ -69,7 +69,7 @@ func (s *Service) ListCustomers() ([]*entity.Customer, error) {
 	return sales, nil
 }
 
-//DeleteCategory Delete a customer
+//DeleteCustomer Delete a customer
 func (s *Service) DeleteCustomer(id uint) error {
 	_, err := s.GetCustomer(id)
 	if err != nil {
@@ -78,7 +78,7 @@ func (s *Service) DeleteCustomer(id uint) error {
 	return s.repo.Delete(id)
 }
 
-//UpdateCategory Update a customer
+//UpdateCustomer Update a customer
 func (s *Service) UpdateCustomer(e *entity.Customer) error {
 	err := e.Validate()
 	if err != nil {
