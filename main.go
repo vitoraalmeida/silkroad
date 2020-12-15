@@ -15,7 +15,7 @@ import (
 	_ "github.com/vitoraalmeida/silkroad/usecase/checkout"
 	"github.com/vitoraalmeida/silkroad/usecase/customer"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
-	_ "github.com/vitoraalmeida/silkroad/usecase/sale"
+	"github.com/vitoraalmeida/silkroad/usecase/sale"
 	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
 )
 
@@ -54,8 +54,8 @@ func main() {
 	pr := repository.NewProductPQSL(db)
 	ps := product.NewService(pr)
 	// sale
-	//inmemSale := sale.NewInmem()
-	//ss := sale.NewService(inmemSale)
+	sr := repository.NewSalePQSL(db)
+	ss := sale.NewService(sr)
 	// customer
 	csr := repository.NewCustomerPQSL(db)
 	css := customer.NewService(csr)
@@ -198,6 +198,7 @@ func main() {
 	fmt.Println("\n\n------------------------- Customers --------------------------------------\n")
 	fmt.Println(css.CreateCustomer("Vitor", "vitor@mail.com", "66666666666", "asenha"))
 	fmt.Println(css.CreateCustomer("Ana", "ana@mail.com", "77777777777", "asenha"))
+	fmt.Println(css.CreateCustomer("Fred", "fred@mail.com", "88888888888", "asenha"))
 
 	fmt.Println(css.GetCustomer(1))
 
@@ -240,12 +241,33 @@ func main() {
 		fmt.Printf("%+v\n", p)
 	}
 
-	//fmt.Println("\n\n----------------------- Lista de vendas ------------------------------------\n")
+	fmt.Println("\n\n------------------------- Sales --------------------------------------\n")
+	fmt.Println(ss.CreateSale(2, 999.99))
+	fmt.Println(ss.CreateSale(2, 99.99))
+	fmt.Println(ss.CreateSale(3, 666.66))
 
-	//sales, _ := ss.ListSales()
-	//for _, s := range sales {
-	//	fmt.Printf("%+v\n", s)
-	//}
+	fmt.Println(ss.GetSale(1))
+
+	fmt.Println("\n\n------------------------- All Sales --------------------------\n")
+	sales, err := ss.ListSales()
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, v := range sales {
+		fmt.Printf("%v\n", v)
+	}
+
+	fmt.Println("\n\n------------------------- Delete Sale --------------------------------------\n")
+	err = ss.DeleteSale(1)
+
+	fmt.Println("\n\n------------------------- Customer 2's sales --------------------------\n")
+	sales, err = ss.SearchSales(2)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, v := range sales {
+		fmt.Printf("%v\n", v)
+	}
 
 	//fmt.Println("\n\n----------------------- Carrinho 1 -----------------------------------\n")
 
@@ -254,12 +276,6 @@ func main() {
 	//ci3 := checkout.CartItem{3, 4, 400.00}
 	//cart := &checkout.Cart{ci1, ci2, ci3}
 	//fmt.Printf("Cart: %+v", cart)
-
-	//fmt.Println("\n\nCustomer 1 ------------------------------------\n")
-
-	//customerID, _ := css.CreateCustomer("Vitor Almeida", "vitor@mail.com", "01234567890", "123456")
-	//customer1, err := css.GetCustomer(customerID)
-	//fmt.Printf("customer: %+v", customer1)
 
 	//fmt.Println("\n\n----------------------- Checkout 1 ----------------------------------------------")
 	//chs.Checkout(cart, 1)

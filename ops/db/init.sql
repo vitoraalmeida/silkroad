@@ -31,6 +31,16 @@ CREATE TABLE IF NOT EXISTS customer (
     updated_at  timestamp with time zone NOT NULL DEFAULT now()
 );
 
+CREATE TABLE IF NOT EXISTS sale (
+    id serial CONSTRAINT pk_id_sale PRIMARY KEY,
+    customer_id INT, 
+    total_amount numeric(9,2) NOT NULL,
+    created_at  timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at  timestamp with time zone NOT NULL DEFAULT now(),
+    CONSTRAINT fk_customer
+        FOREIGN KEY (customer_id)
+        REFERENCES customer (id)
+);
 
 CREATE OR REPLACE FUNCTION trigger_update_timestamp()
 RETURNS TRIGGER AS $$
@@ -52,5 +62,10 @@ EXECUTE PROCEDURE trigger_update_timestamp();
 
 CREATE TRIGGER update_timestamp_customer
 BEFORE UPDATE ON customer
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_update_timestamp();
+
+CREATE TRIGGER update_timestamp_sale
+BEFORE UPDATE ON sale
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_update_timestamp();
