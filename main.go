@@ -16,7 +16,7 @@ import (
 	"github.com/vitoraalmeida/silkroad/usecase/customer"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
 	"github.com/vitoraalmeida/silkroad/usecase/sale"
-	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
+	"github.com/vitoraalmeida/silkroad/usecase/saleitem"
 )
 
 type CartItem struct {
@@ -59,9 +59,9 @@ func main() {
 	// customer
 	csr := repository.NewCustomerPQSL(db)
 	css := customer.NewService(csr)
-	//// saleitem
-	//inmemSaleItem := saleitem.NewInmem()
-	//sis := saleitem.NewService(inmemSaleItem)
+	// saleitem
+	sir := repository.NewSaleItemPQSL(db)
+	sis := saleitem.NewService(sir)
 	//// checkout
 	//chs := checkout.NewService(ss, sis, css, ps)
 
@@ -243,8 +243,8 @@ func main() {
 
 	fmt.Println("\n\n------------------------- Sales --------------------------------------\n")
 	fmt.Println(ss.CreateSale(2, 999.99))
-	fmt.Println(ss.CreateSale(2, 99.99))
-	fmt.Println(ss.CreateSale(3, 666.66))
+	fmt.Println(ss.CreateSale(2, 750.00))
+	fmt.Println(ss.CreateSale(3, 720.00))
 
 	fmt.Println(ss.GetSale(1))
 
@@ -266,6 +266,36 @@ func main() {
 		fmt.Println(err)
 	}
 	for _, v := range sales {
+		fmt.Printf("%v\n", v)
+	}
+
+	fmt.Println("\n\n------------------------- Sale 2's items --------------------------\n")
+
+	fmt.Println(sis.CreateSaleItem(2, 1, 4, 400.00))
+	fmt.Println(sis.CreateSaleItem(2, 3, 5, 350.00))
+
+	fmt.Println(sis.GetSaleItem(1))
+
+	fmt.Println("\n\n------------------------- Sale 3's items --------------------------\n")
+
+	fmt.Println(sis.CreateSaleItem(3, 1, 3, 300.00))
+	fmt.Println(sis.CreateSaleItem(3, 3, 6, 420.00))
+
+	fmt.Println("\n\n------------------------- All Sale items --------------------------\n")
+	saleItems, err := sis.ListSaleItems()
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, v := range saleItems {
+		fmt.Printf("%v\n", v)
+	}
+
+	fmt.Println("\n\n------------------------- Sale 2's items --------------------------\n")
+	saleItems, err = sis.SearchItemsBySaleID(2)
+	if err != nil {
+		fmt.Println(err)
+	}
+	for _, v := range saleItems {
 		fmt.Printf("%v\n", v)
 	}
 

@@ -45,7 +45,7 @@ func (s *Service) GetSaleItem(id uint) (*entity.SaleItem, error) {
 
 //SearchSalesItems search sale items by saleID
 func (s *Service) SearchItemsBySaleID(saleID uint) ([]*entity.SaleItem, error) {
-	sales, err := s.repo.SearchBySaleID(saleID)
+	sales, err := s.repo.Search(saleID)
 	if err != nil {
 		return nil, err
 	}

@@ -42,6 +42,22 @@ CREATE TABLE IF NOT EXISTS sale (
         REFERENCES customer (id)
 );
 
+CREATE TABLE IF NOT EXISTS sale_item (
+    id serial CONSTRAINT pk_id_sale_item PRIMARY KEY,
+    sale_id INT, 
+    product_id INT, 
+    quantity INT, 
+    item_amount numeric(9,2) NOT NULL,
+    created_at  timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at  timestamp with time zone NOT NULL DEFAULT now(),
+    CONSTRAINT fk_sale_id
+        FOREIGN KEY (sale_id)
+        REFERENCES sale (id),
+    CONSTRAINT fk_product_id
+        FOREIGN KEY (product_id)
+        REFERENCES product (id)
+);
+
 CREATE OR REPLACE FUNCTION trigger_update_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -67,5 +83,10 @@ EXECUTE PROCEDURE trigger_update_timestamp();
 
 CREATE TRIGGER update_timestamp_sale
 BEFORE UPDATE ON sale
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_update_timestamp();
+
+CREATE TRIGGER update_timestamp_sale_item
+BEFORE UPDATE ON sale_item
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_update_timestamp();

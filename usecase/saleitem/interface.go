@@ -6,7 +6,7 @@ import (
 
 type Reader interface {
 	Get(id uint) (*entity.SaleItem, error)
-	SearchBySaleID(saleID uint) ([]*entity.SaleItem, error)
+	Search(saleID uint) ([]*entity.SaleItem, error)
 	List() ([]*entity.SaleItem, error)
 }
 
