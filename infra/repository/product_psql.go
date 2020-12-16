@@ -97,6 +97,11 @@ func (pr *ProductPSQL) Get(id uint) (*entity.Product, error) {
 			return nil, fmt.Errorf("Create product psql: %v", err)
 		}
 	}
+
+	// check if any product was found
+	if p.ID == 0 {
+		return nil, fmt.Errorf("Get product psql: product not found")
+	}
 	return &p, nil
 }
 
@@ -140,7 +145,7 @@ func (pr *ProductPSQL) Delete(id uint) error {
 }
 
 func (pr *ProductPSQL) DecrementStock(id, quantity uint) error {
-	_, err := pr.db.Exec("update product set stock = stock - $1 where id = $2", id, quantity)
+	_, err := pr.db.Exec("update product set stock = stock - $1 where id = $2", quantity, id)
 	if err != nil {
 		return err
 	}

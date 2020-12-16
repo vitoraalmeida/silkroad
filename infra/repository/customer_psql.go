@@ -94,7 +94,14 @@ func (cs *CustomerPSQL) Get(id uint) (*entity.Customer, error) {
 		if err != nil {
 			return nil, fmt.Errorf("Get customer psql: %v", err)
 		}
+
 	}
+
+	// check if any customer was found
+	if c.ID == 0 {
+		return nil, fmt.Errorf("Get customer psql: customer not found")
+	}
+
 	return &c, nil
 }
 
