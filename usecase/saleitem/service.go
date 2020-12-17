@@ -5,8 +5,6 @@ import (
 	"time"
 )
 
-var cID uint = 1
-
 //Service saleitem usecase
 type Service struct {
 	repo Repository
@@ -25,8 +23,6 @@ func (s *Service) CreateSaleItem(saleID uint, productID uint, quantity uint, ite
 	if err != nil {
 		return b.ID, err
 	}
-	b.ID = cID
-	cID += 1
 	return s.repo.Create(b)
 }
 
