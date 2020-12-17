@@ -58,6 +58,22 @@ CREATE TABLE IF NOT EXISTS sale_item (
         REFERENCES product (id)
 );
 
+CREATE TABLE IF NOT EXISTS delivery (
+    id serial CONSTRAINT pk_id_delivery PRIMARY KEY,
+    sale_id INT,
+    customer_id INT,
+    address text,
+    status text,
+    created_at  timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at  timestamp with time zone NOT NULL DEFAULT now(),
+    CONSTRAINT fk_sale_id
+        FOREIGN KEY (sale_id)
+        REFERENCES sale (id),
+    CONSTRAINT fk_customer_id
+        FOREIGN KEY (customer_id)
+        REFERENCES customer (id)
+);
+
 CREATE OR REPLACE FUNCTION trigger_update_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -88,5 +104,10 @@ EXECUTE PROCEDURE trigger_update_timestamp();
 
 CREATE TRIGGER update_timestamp_sale_item
 BEFORE UPDATE ON sale_item
+FOR EACH ROW
+EXECUTE PROCEDURE trigger_update_timestamp();
+
+CREATE TRIGGER update_timestamp_delivery
+BEFORE UPDATE ON delivery
 FOR EACH ROW
 EXECUTE PROCEDURE trigger_update_timestamp();

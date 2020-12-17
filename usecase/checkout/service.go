@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/vitoraalmeida/silkroad/usecase/customer"
+	"github.com/vitoraalmeida/silkroad/usecase/delivery"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
 	"github.com/vitoraalmeida/silkroad/usecase/sale"
 	"github.com/vitoraalmeida/silkroad/usecase/saleitem"
@@ -12,6 +13,7 @@ import (
 
 type Service struct {
 	customerService customer.UseCase
+	deliveryService delivery.UseCase
 	productService  product.UseCase
 	saleService     sale.UseCase
 	saleItemService saleitem.UseCase
@@ -29,12 +31,13 @@ var ErrInvalidCustomer = errors.New("Customer doesn't exist")
 var ErrCartEmpty = errors.New("Cart cannot be empty")
 var ErrInvalidProduct = errors.New("Product doesn't exist")
 
-func NewService(s sale.UseCase, si saleitem.UseCase, cs customer.UseCase, ps product.UseCase) *Service {
+func NewService(s sale.UseCase, si saleitem.UseCase, cs customer.UseCase, ps product.UseCase, ds delivery.UseCase) *Service {
 	return &Service{
 		customerService: cs,
 		productService:  ps,
 		saleService:     s,
 		saleItemService: si,
+		deliveryService: ds,
 	}
 }
 
@@ -67,6 +70,10 @@ func (s *Service) Checkout(c *Cart, customerID uint) error {
 
 	// create sale
 	saleID, _ := s.saleService.CreateSale(customerID, totalAmount)
+	_, err = s.deliveryService.CreateDelivery(saleID, customerID, "Av 2 n 2", "aguardando envio")
+	if err != nil {
+		return err
+	}
 
 	// register sale's items
 	for _, ci := range *c {

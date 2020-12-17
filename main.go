@@ -14,6 +14,7 @@ import (
 	"github.com/vitoraalmeida/silkroad/usecase/category"
 	"github.com/vitoraalmeida/silkroad/usecase/checkout"
 	"github.com/vitoraalmeida/silkroad/usecase/customer"
+	"github.com/vitoraalmeida/silkroad/usecase/delivery"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
 	"github.com/vitoraalmeida/silkroad/usecase/sale"
 	"github.com/vitoraalmeida/silkroad/usecase/saleitem"
@@ -62,8 +63,11 @@ func main() {
 	// saleitem
 	sir := repository.NewSaleItemPQSL(db)
 	sis := saleitem.NewService(sir)
+	// delivery
+	dr := repository.NewDeliveryPSQL(db)
+	ds := delivery.NewService(dr)
 	// checkout
-	chs := checkout.NewService(ss, sis, css, ps)
+	chs := checkout.NewService(ss, sis, css, ps, ds)
 
 	fmt.Println(cs.CreateCategory("Livros"))
 	fmt.Println(cs.CreateCategory("roupas"))
@@ -369,6 +373,37 @@ func main() {
 	sales, _ = ss.ListSales()
 	for _, s := range sales {
 		fmt.Printf("%+v\n", s)
+	}
+
+	fmt.Println("\n ----------------------- All deliveries -------------------------- \n")
+	deliveries, _ := ds.ListDeliveries()
+	for _, d := range deliveries {
+		fmt.Printf("%+v\n", d)
+	}
+
+	fmt.Println("\n ----------------------- Update delivery 1 -------------------------- \n")
+
+	delivery, _ := ds.GetDelivery(1)
+	changedDelivery := &entity.Delivery{
+		ID:         delivery.ID,
+		SaleID:     delivery.SaleID,
+		CustomerID: delivery.CustomerID,
+		Address:    "Av 1 n 29",
+		Status:     "encaminhado",
+		CreatedAt:  delivery.CreatedAt,
+	}
+	fmt.Printf("Updating\n\n%+v\n\nto\n\n %+v\n", delivery, changedDelivery)
+
+	time.Sleep(5 * time.Second)
+	err = ds.UpdateDelivery(changedDelivery)
+	if err != nil {
+		fmt.Println("Not changed")
+	}
+
+	fmt.Println("\n ----------------------- All deliveries -------------------------- \n")
+	deliveries, _ = ds.ListDeliveries()
+	for _, d := range deliveries {
+		fmt.Printf("%+v\n", d)
 	}
 
 }
