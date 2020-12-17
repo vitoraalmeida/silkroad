@@ -41,7 +41,7 @@ func NewService(s sale.UseCase, si saleitem.UseCase, cs customer.UseCase, ps pro
 func (s *Service) Checkout(c *Cart, customerID uint) error {
 	_, err := s.customerService.GetCustomer(customerID)
 	if err != nil {
-		return ErrInvalidCustomer
+		return fmt.Errorf("Customer not found")
 	}
 
 	// check cart
@@ -52,7 +52,7 @@ func (s *Service) Checkout(c *Cart, customerID uint) error {
 	for _, ci := range *c {
 		p, err := s.productService.GetProduct(ci.ProductID)
 		if err != nil {
-			return ErrInvalidProduct
+			return fmt.Errorf("Item Cart: %#v\nProduct %d not found", ci, ci.ProductID)
 		}
 		if p.Stock < ci.Quantity {
 			return fmt.Errorf("Item Cart: %#v\nProduct %d out of stock", ci, ci.ProductID)
