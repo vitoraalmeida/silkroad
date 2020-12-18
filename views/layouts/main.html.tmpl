@@ -1,10 +1,10 @@
+{{ define "main" }}
 <!DOCTYPE html>
-<html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="views/style.css">
     <title>Silk Road | Fármacia</title>
 </head>
 <body>
@@ -75,16 +75,7 @@
         </header>
         <!-- Main -->
         <main>
-            <div class="product">
-                <div class="p-box">
-                    <a href="produto.html">
-                        <img src="./img/produto01.png" alt=""/>
-                        <p>{{ .Name }}</p>
-                    </a>
-                    <a href="#" class="price">{{ .Price }}</a>
-                    <a href="#" class="buy-btn">Adicionar ao Carrinho</a>
-                </div>
-            </div>
+            {{ template "yield" . }}
         </main>
         <!-- Barra Lateral -->
         <aside>
@@ -106,3 +97,4 @@
     </div>
 </body>
 </html>
+{{ end }}

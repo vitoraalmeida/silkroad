@@ -24,13 +24,15 @@ import (
 	"github.com/vitoraalmeida/silkroad/views"
 )
 
-var homeView *views.View
-var productView *views.View
+var (
+	homeView    *views.View
+	productView *views.View
+)
 
 func home(w http.ResponseWriter, r *http.Request) {
 	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeView.Template.Execute(w, product); err != nil {
+	if err := homeView.Template.ExecuteTemplate(w, homeView.Layout, product); err != nil {
 		panic(err)
 	}
 }
@@ -38,7 +40,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 func product(w http.ResponseWriter, r *http.Request) {
 	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
 	w.Header().Set("Content-Type", "text/html")
-	if err := productView.Template.Execute(w, product); err != nil {
+	if err := productView.Template.ExecuteTemplate(w, productView.Layout, product); err != nil {
 		panic(err)
 	}
 }
@@ -84,8 +86,8 @@ func main() {
 	//// checkout
 	//chs := checkout.NewService(ss, sis, css, ps, ds)
 
-	homeView = views.NewView("views/index.html.tmpl")
-	productView = views.NewView("views/product.html.tmpl")
+	homeView = views.NewView("main", "views/home.html.tmpl")
+	productView = views.NewView("main", "views/product.html.tmpl")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
