@@ -12,7 +12,7 @@ import (
 
 	"github.com/gorilla/mux"
 
-	_ "github.com/vitoraalmeida/silkroad/entity"
+	"github.com/vitoraalmeida/silkroad/entity"
 	_ "github.com/vitoraalmeida/silkroad/infra/repository"
 	_ "github.com/vitoraalmeida/silkroad/usecase/category"
 	_ "github.com/vitoraalmeida/silkroad/usecase/checkout"
@@ -21,18 +21,26 @@ import (
 	_ "github.com/vitoraalmeida/silkroad/usecase/product"
 	_ "github.com/vitoraalmeida/silkroad/usecase/sale"
 	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
+	"github.com/vitoraalmeida/silkroad/views"
 )
 
+var homeView *views.View
+var productView *views.View
+
 func home(w http.ResponseWriter, r *http.Request) {
+	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>Welcome to my awesome site!</h1>")
+	if err := homeView.Template.Execute(w, product); err != nil {
+		panic(err)
+	}
 }
 
-func admin(w http.ResponseWriter, r *http.Request) {
+func product(w http.ResponseWriter, r *http.Request) {
+	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "To get in touch, please send an email "+
-		"to <a href=\"mailto:support@lenslocked.com\">"+
-		"support@lenslocked.com</a>.")
+	if err := productView.Template.Execute(w, product); err != nil {
+		panic(err)
+	}
 }
 
 func main() {
@@ -76,8 +84,11 @@ func main() {
 	//// checkout
 	//chs := checkout.NewService(ss, sis, css, ps, ds)
 
+	homeView = views.NewView("views/index.html.tmpl")
+	productView = views.NewView("views/product.html.tmpl")
+
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
-	r.HandleFunc("/admin", admin)
+	r.HandleFunc("/product", product)
 	http.ListenAndServe(":3000", r)
 }
