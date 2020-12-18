@@ -7,7 +7,7 @@ type Admin struct {
 	Password string
 }
 
-func NewAdmin(name, email, cpf, password string) (*Admin, error) {
+func NewAdmin(name, email, password string) (*Admin, error) {
 	a := &Admin{
 		Name:     name,
 		Email:    email,
