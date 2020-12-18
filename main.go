@@ -92,5 +92,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
 	r.HandleFunc("/product", product)
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/",
+		http.FileServer(http.Dir("views/static/"))))
 	http.ListenAndServe(":3000", r)
 }
