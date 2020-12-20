@@ -32,17 +32,13 @@ var (
 func home(w http.ResponseWriter, r *http.Request) {
 	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
 	w.Header().Set("Content-Type", "text/html")
-	if err := homeView.Template.ExecuteTemplate(w, homeView.Layout, product); err != nil {
-		panic(err)
-	}
+	must(homeView.Render(w, product))
 }
 
 func product(w http.ResponseWriter, r *http.Request) {
 	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
 	w.Header().Set("Content-Type", "text/html")
-	if err := productView.Template.ExecuteTemplate(w, productView.Layout, product); err != nil {
-		panic(err)
-	}
+	must(productView.Render(w, product))
 }
 
 func main() {
@@ -86,8 +82,8 @@ func main() {
 	//// checkout
 	//chs := checkout.NewService(ss, sis, css, ps, ds)
 
-	homeView = views.NewView("main", "views/home.html.tmpl")
-	productView = views.NewView("main", "views/product.html.tmpl")
+	homeView = views.NewView("main", "views/home.tmpl")
+	productView = views.NewView("main", "views/product.tmpl")
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", home)
@@ -95,4 +91,10 @@ func main() {
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/",
 		http.FileServer(http.Dir("views/static/"))))
 	http.ListenAndServe(":3000", r)
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
