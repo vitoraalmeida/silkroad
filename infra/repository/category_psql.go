@@ -36,7 +36,7 @@ func (cs *CategoryPSQL) Create(c *entity.Category) (uint, error) {
 }
 
 func (cs *CategoryPSQL) List() ([]*entity.Category, error) {
-	stmt, err := cs.db.Prepare(`select id, name, created_at, updated_at from category`)
+	stmt, err := cs.db.Prepare(`select * from category`)
 	if err != nil {
 		return nil, err
 	}

@@ -72,7 +72,6 @@ func (p *Products) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	}
 	p.l.Println("Product created id: ", id)
 	http.Redirect(w, r, "/admin", http.StatusSeeOther)
-	w.WriteHeader(http.StatusCreated)
 }
 
 func (p *Products) Validate(name string, category string, price float64, stock uint) string {

@@ -1,0 +1,12 @@
+{{ define "yield" }}
+    <div class="new-category">
+        <form class="new-category-content" id="category-form" action="/admin/category/create" method="POST">
+            <h2>Nova Categoria</h2>
+            <div class="new-category-modal">
+                <label for="name"><b>Nome</b></label>
+                <input type="text" placeholder="Digite o nome" name="name" id="name" required>
+                <button class="mybtn" type="submit">Criar</button>
+            </div>
+        </form>
+    </div>
+{{ end }}

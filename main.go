@@ -28,15 +28,16 @@ import (
 )
 
 var (
-	productService    *product.Service
-	products          *[]entity.Product
-	homeView          *views.View
-	adminView         *views.View
-	productView       *views.View
-	editProductView   *views.View
-	createProductView *views.View
-	signupView        *views.View
-	signinView        *views.View
+	productService     *product.Service
+	products           *[]entity.Product
+	homeView           *views.View
+	adminView          *views.View
+	productView        *views.View
+	editProductView    *views.View
+	createProductView  *views.View
+	createCategoryView *views.View
+	signupView         *views.View
+	signinView         *views.View
 )
 
 func admin(w http.ResponseWriter, r *http.Request) {
@@ -74,6 +75,11 @@ func editProduct(w http.ResponseWriter, r *http.Request) {
 func createProduct(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	must(createProductView.Render(w, nil))
+}
+
+func createCategory(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	must(createCategoryView.Render(w, nil))
 }
 
 func seeProduct(w http.ResponseWriter, r *http.Request) {
@@ -122,6 +128,7 @@ func main() {
 	//// category
 	cr := repository.NewCategoryPQSL(db)
 	cs := category.NewService(cr)
+	ch := handler.NewCategories(l, cs)
 	// product
 	pr := repository.NewProductPQSL(db)
 	ps := product.NewService(pr)
@@ -154,6 +161,7 @@ func main() {
 	adminView = views.NewView("main-admin", "views/home-admin.tmpl")
 	editProductView = views.NewView("main-admin", "views/edit-product.tmpl")
 	createProductView = views.NewView("main-admin", "views/create-product.tmpl")
+	createCategoryView = views.NewView("main-admin", "views/create-category.tmpl")
 
 	r := mux.NewRouter()
 	getRouter := r.Methods("GET").Subrouter()
@@ -161,6 +169,7 @@ func main() {
 	getRouter.HandleFunc("/admin", admin)
 	getRouter.HandleFunc("/admin/product/{id:[0-9]+}/update", editProduct)
 	getRouter.HandleFunc("/admin/product/create", createProduct)
+	getRouter.HandleFunc("/admin/category/create", createCategory)
 	//getRouter.HandleFunc("/admin/products", ListProducts)
 	//getRouter.HandleFunc("/admin/category", ListCategories)
 	//getRouter.HandleFunc("/admin/sales", ListSales)
@@ -172,6 +181,7 @@ func main() {
 	postRouter.HandleFunc("/signup", csh.CreateCustomer)
 	postRouter.HandleFunc("/signin", sih.SignIn)
 	postRouter.HandleFunc("/admin/product/create", psh.CreateProduct)
+	postRouter.HandleFunc("/admin/category/create", ch.CreateCategory)
 	//postRouter.HandleFunc("/admin/products", CreateProduct)
 	//postRouter.HandleFunc("/admin/category", CreateCategory)
 	//postRouter.HandleFunc("/sale", CreateSale)
