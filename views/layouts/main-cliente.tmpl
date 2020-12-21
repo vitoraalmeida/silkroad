@@ -1,0 +1,69 @@
+{{ define "main-cliente" }}
+<!DOCTYPE html>
+<html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Silk Road | Fármacia</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <a href="/client"><img src='/static/img/logo.png'/></a>
+            </div>
+            <div class="search-box">
+                <input id="search-inputText" type="text" name="" placeholder="Seja bem-vindo, o que você busca?" required="" data-invalid="" aria-invalid="true">
+                <a class="search-btn" href="#">
+                </a>
+            </div>
+            <a href="pedidos.html" class="pedidos">
+                <div class="img-pedidos">
+                    <img src='/static/img/pedidos.png'/>
+                </div>
+                <div class="text-pedidos">
+                    <strong>
+                        Meus Pedidos
+                    </strong>
+                </div>
+            </a>
+            <a href="carrinho.html" class="carrinho">
+                <div class="img-carrinho">
+                    <img src='/static/img/carrinho.png'/>
+                </div>
+                <div class="text-carrinho">
+                    <strong>
+                        Meu Carrinho
+                    </strong>
+                </div>
+            </a>
+        </header>
+        <!-- Main -->
+        <main>
+            {{ template "yield" . }}
+        </main>
+        <!-- Barra Lateral -->
+        <aside>
+            <div class="barra-lateral" id="barra">
+                <div class="titulo">
+                    <span><img src='/static/img/abc.png'/><h1 style='display:inline;'>Medicamentos</h1></span>    
+                </div>
+                <ul>
+                    <li>
+                        <a href="#">PRESSÃO ALTA</a>
+                    </li>
+                    <a href="edit-categoria.html" class="btn-img" id="01"><img src="/static/img/edit.png" class="imgedit"></a>
+                    <li class="addcategoria">
+                        <a href="/admin/category/create" class="register-category">CADASTRAR CATEGORIA</a>
+                    </li>
+                </ul>    
+            </div>
+        </aside>
+        <!-- Footer -->
+        {{ template "footer" }}
+</body>
+</html>
+{{ end }}

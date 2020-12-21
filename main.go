@@ -32,6 +32,7 @@ var (
 	products           *[]entity.Product
 	homeView           *views.View
 	adminView          *views.View
+	customerView       *views.View
 	productView        *views.View
 	editProductView    *views.View
 	createProductView  *views.View
@@ -48,6 +49,16 @@ func admin(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "text/html")
 	must(adminView.Render(w, prods))
+}
+
+func customerPage(w http.ResponseWriter, r *http.Request) {
+	var prods []entity.Product
+	products, _ := productService.ListProducts()
+	for _, v := range products {
+		prods = append(prods, *v)
+	}
+	w.Header().Set("Content-Type", "text/html")
+	must(customerView.Render(w, prods))
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -159,6 +170,7 @@ func main() {
 	signupView = views.NewView("main", "views/signup.tmpl")
 	signinView = views.NewView("main", "views/signin.tmpl")
 	adminView = views.NewView("main-admin", "views/home-admin.tmpl")
+	customerView = views.NewView("main-cliente", "views/home.tmpl")
 	editProductView = views.NewView("main-admin", "views/edit-product.tmpl")
 	createProductView = views.NewView("main-admin", "views/create-product.tmpl")
 	createCategoryView = views.NewView("main-admin", "views/create-category.tmpl")
@@ -167,6 +179,7 @@ func main() {
 	getRouter := r.Methods("GET").Subrouter()
 	getRouter.HandleFunc("/", home)
 	getRouter.HandleFunc("/admin", admin)
+	getRouter.HandleFunc("/customer", customerPage)
 	getRouter.HandleFunc("/admin/product/{id:[0-9]+}/update", editProduct)
 	getRouter.HandleFunc("/admin/product/create", createProduct)
 	getRouter.HandleFunc("/admin/category/create", createCategory)

@@ -68,7 +68,7 @@ func (c *Customers) CreateCustomer(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	c.l.Println("Customer created id: ", id)
-	w.WriteHeader(http.StatusCreated)
+	http.Redirect(w, r, "/signin", http.StatusSeeOther)
 }
 
 func (c *Customers) Validate(name, email, cpf, password string) string {

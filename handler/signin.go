@@ -58,7 +58,7 @@ func (s *SignIn) SignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.l.Println("Logged in")
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/customer", http.StatusSeeOther)
 
 	//token, err := auth.CreateToken(user.ID)
 	//if err != nil {
