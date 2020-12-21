@@ -21,12 +21,12 @@ import (
 	"github.com/vitoraalmeida/silkroad/usecase/customer"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
 	"github.com/vitoraalmeida/silkroad/views"
-	/*
-		"github.com/vitoraalmeida/silkroad/usecase/checkout"
-		"github.com/vitoraalmeida/silkroad/usecase/delivery"
-		"github.com/vitoraalmeida/silkroad/usecase/sale"
-		"github.com/vitoraalmeida/silkroad/usecase/saleitem"
-	*/)
+
+	_ "github.com/vitoraalmeida/silkroad/usecase/checkout"
+	_ "github.com/vitoraalmeida/silkroad/usecase/delivery"
+	_ "github.com/vitoraalmeida/silkroad/usecase/sale"
+	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
+)
 
 var (
 	productService     *product.Service
