@@ -6,8 +6,6 @@ import (
 	"github.com/vitoraalmeida/silkroad/entity"
 )
 
-var cID uint = 1
-
 //Service customer usecase
 type Service struct {
 	repo Repository
@@ -27,14 +25,25 @@ func (s *Service) CreateCustomer(name, email, cpf, password string) (uint, error
 	if err != nil {
 		return b.ID, err
 	}
-	b.ID = cID
-	cID += 1
 	return s.repo.Create(b)
 }
 
 //GetCustomer get a customer
 func (s *Service) GetCustomer(id uint) (*entity.Customer, error) {
 	b, err := s.repo.Get(id)
+	if b == nil {
+		return nil, entity.ErrNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return b, nil
+}
+
+//GetCustomerByEmail get a customer by email
+func (s *Service) GetCustomerByEmail(email string) (*entity.Customer, error) {
+	b, err := s.repo.GetByEmail(email)
 	if b == nil {
 		return nil, entity.ErrNotFound
 	}

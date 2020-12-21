@@ -6,6 +6,7 @@ import (
 
 type Reader interface {
 	Get(id uint) (*entity.Customer, error)
+	GetByEmail(email string) (*entity.Customer, error)
 	Search(query string) ([]*entity.Customer, error)
 	List() ([]*entity.Customer, error)
 }
@@ -23,6 +24,7 @@ type Repository interface {
 
 type UseCase interface {
 	GetCustomer(id uint) (*entity.Customer, error)
+	GetCustomerByEmail(email uint) (*entity.Customer, error)
 	SearchCustomers(name string) ([]*entity.Customer, error)
 	ListCustomers() ([]*entity.Customer, error)
 	CreateCustomer(name, email, cpf, password string) (uint, error)

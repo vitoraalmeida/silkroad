@@ -1,0 +1,19 @@
+{{ define "yield"}}
+<div class="cadastro">
+    <form class="cadastro-content" id="cadastro-form" action="/signup" method="POST">
+        <h2>Cadastrar no site</h2>
+        <div class="cadastro-modal">
+            <label for="name"><b>Nome</b></label>
+            <input type="text" name="name" id="name" placeholder="Digite seu nome" required>
+            <label for="email"><b>Email</b></label>
+            <input type="text" name="email" id="email" placeholder="Digite seu email" required>
+            </br>
+            <label for="cpf"><b>CPF</b></label>
+            <input type="text" name="cpf" id="cpf" placeholder="Digite seu CPF" required>
+            <label for="password"><b>Senha</b></label>
+            <input type="password" name="password" id="password" placeholder="Digite sua senha" required>
+            <button class="cadastrar-btn" type="submit">Cadastrar</button>
+        </div>
+    </form>
+</div>
+{{ end }}

@@ -1,0 +1,18 @@
+{{ define "yield"}}
+<div class="login-bg">
+    <form class="login-content" action="/signin" method="POST">
+        <div class="imgcontainer">
+            <img src='/static/img/avatar.png' alt="avatar" class="avatar"/>
+        </div>
+        <div class="login-m">
+            <label for="email"><b>Email</b></label>
+            <input type="email" name="email" id="email" placeholder="Digite seu email" required>
+            </br>
+            <label for="password"><b>Senha</b></label>
+            <input type="password" name="password" id="password" placeholder="Digite sua senha" required>
+            <button class="entrar" type="submit">Login</button>
+            <a class="cadastrar" href="/signup">Cadastrar<a>
+        </div>
+    </form>
+</div>
+{{ end }}

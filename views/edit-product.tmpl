@@ -1,0 +1,29 @@
+{{ define "yield" }}
+<div class="edit-prod">
+    <form class="edit-prod-content" id="edit-prod-form" action="#" method="post">
+    <h2>Editar Produto</h2>
+		<div class="edit-prod-modal">
+			<label for="name"><b>Nome</b></label>
+			<input type="text" placeholder="{{ .Name}}" name="name" id="name" required>
+			<label for="categoria"><b>Categoria</b></label>
+			<select id="categoria" form="prod-form">
+				<option value="pressaoalta">Pressao Alta</option>
+				<option value="dorc">Dor de Cabeça</option>
+				<option value="Diabetes">Diabetes</option>
+				<option value="dorp">Dores no Corpo</option>
+			  </select>
+			<label for="price"><b>Preço</b></label>
+			<input type="number" placeholder="{{ .Price }}" name="price" id="price" required>
+			<label for="stock"><b>Estoque</b></label>
+			<input type="number" placeholder="{{ .Stock }}" name="stock" id="stock" required>
+			<label for="available"><b>Disponível:</b></label>
+			<input type="radio" id="yes" name="available" id="available">
+			<label for="yes">Sim</label>
+			<input type="radio" id="no" name="available" id="available">
+			<label for="no">Não</label>
+			<button class="mybtn" type="submit">Confirmar</button>
+			<button class="mybtn" type="button">Remover</button>
+		</div>
+	</form> 
+</div>
+{{ end }}

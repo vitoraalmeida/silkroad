@@ -1,14 +1,15 @@
 {{ define "yield" }}
-<div class="product">
+<div class="product" id="prod">
     {{ range . }}
     <div class="p-box">
         <a href="/product/{{.ID}}">
             <img src="/static/img/produto01.png" alt=""/>
             <p>{{ .Name }}</p>
         </a>
-        <a href="#" class="price">R$ {{ .Price }}</a>
-        <a href="#" class="buy-btn">Adicionar ao Carrinho</a>
+        <a href="#" class="price">{{ .Price }}</a>
+        <a href="/admin/product/{{.ID}}/update" class="edit-btn">Editar Produto</a>
     </div>
     {{ end }}
 </div>
 {{ end }}
+

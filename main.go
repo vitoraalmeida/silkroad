@@ -8,37 +8,94 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	_ "time"
 
 	"github.com/gorilla/mux"
 
 	"github.com/vitoraalmeida/silkroad/entity"
-	_ "github.com/vitoraalmeida/silkroad/infra/repository"
-	_ "github.com/vitoraalmeida/silkroad/usecase/category"
+	"github.com/vitoraalmeida/silkroad/handler"
+
+	"github.com/vitoraalmeida/silkroad/infra/repository"
+	"github.com/vitoraalmeida/silkroad/usecase/category"
 	_ "github.com/vitoraalmeida/silkroad/usecase/checkout"
-	_ "github.com/vitoraalmeida/silkroad/usecase/customer"
+	"github.com/vitoraalmeida/silkroad/usecase/customer"
 	_ "github.com/vitoraalmeida/silkroad/usecase/delivery"
-	_ "github.com/vitoraalmeida/silkroad/usecase/product"
+	"github.com/vitoraalmeida/silkroad/usecase/product"
 	_ "github.com/vitoraalmeida/silkroad/usecase/sale"
 	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
 	"github.com/vitoraalmeida/silkroad/views"
 )
 
 var (
-	homeView    *views.View
-	productView *views.View
+	productService    *product.Service
+	products          *[]entity.Product
+	homeView          *views.View
+	adminView         *views.View
+	productView       *views.View
+	editProductView   *views.View
+	createProductView *views.View
+	signupView        *views.View
+	signinView        *views.View
 )
 
-func home(w http.ResponseWriter, r *http.Request) {
-	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
+func admin(w http.ResponseWriter, r *http.Request) {
+	var prods []entity.Product
+	products, _ := productService.ListProducts()
+	for _, v := range products {
+		prods = append(prods, *v)
+	}
 	w.Header().Set("Content-Type", "text/html")
-	must(homeView.Render(w, product))
+	must(adminView.Render(w, prods))
 }
 
-func product(w http.ResponseWriter, r *http.Request) {
-	product, _ := entity.NewProduct("Loratadina 50mg", 1, 50.00, 5, true)
+func home(w http.ResponseWriter, r *http.Request) {
+	var prods []entity.Product
+	products, _ := productService.ListProducts()
+	for _, v := range products {
+		prods = append(prods, *v)
+	}
 	w.Header().Set("Content-Type", "text/html")
-	must(productView.Render(w, product))
+	must(homeView.Render(w, prods))
+}
+
+func editProduct(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		log.Println(err)
+	}
+	p, _ := productService.GetProduct(uint(id))
+	w.Header().Set("Content-Type", "text/html")
+	must(editProductView.Render(w, p))
+}
+
+func createProduct(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	must(createProductView.Render(w, nil))
+}
+
+func seeProduct(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idStr := vars["id"]
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		log.Println(err)
+	}
+	p, _ := productService.GetProduct(uint(id))
+	w.Header().Set("Content-Type", "text/html")
+	must(productView.Render(w, p))
+}
+
+func signup(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	must(signupView.Render(w, nil))
+}
+
+func signin(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	must(signinView.Render(w, nil))
 }
 
 func main() {
@@ -60,19 +117,27 @@ func main() {
 		log.Fatal(err.Error())
 	}
 	defer db.Close()
+	l := log.New(os.Stdout, "silkroad", log.LstdFlags)
 
 	//// category
-	//cr := repository.NewCategoryPQSL(db)
-	//cs := category.NewService(cr)
-	//// product
-	//pr := repository.NewProductPQSL(db)
-	//ps := product.NewService(pr)
+	cr := repository.NewCategoryPQSL(db)
+	cs := category.NewService(cr)
+	// product
+	pr := repository.NewProductPQSL(db)
+	ps := product.NewService(pr)
+	productService = ps
+	psh := handler.NewProducts(l, ps, cs)
 	//// sale
 	//sr := repository.NewSalePQSL(db)
 	//ss := sale.NewService(sr)
-	//// customer
-	//csr := repository.NewCustomerPQSL(db)
-	//css := customer.NewService(csr)
+	// customer
+	csr := repository.NewCustomerPQSL(db)
+	css := customer.NewService(csr)
+	csh := handler.NewCustomers(l, css)
+
+	// signin handler
+	sih := handler.NewSignIn(l, css)
+
 	//// saleitem
 	//sir := repository.NewSaleItemPQSL(db)
 	//sis := saleitem.NewService(sir)
@@ -84,10 +149,33 @@ func main() {
 
 	homeView = views.NewView("main", "views/home.tmpl")
 	productView = views.NewView("main", "views/product.tmpl")
+	signupView = views.NewView("main", "views/signup.tmpl")
+	signinView = views.NewView("main", "views/signin.tmpl")
+	adminView = views.NewView("main-admin", "views/home-admin.tmpl")
+	editProductView = views.NewView("main-admin", "views/edit-product.tmpl")
+	createProductView = views.NewView("main-admin", "views/create-product.tmpl")
 
 	r := mux.NewRouter()
-	r.HandleFunc("/", home)
-	r.HandleFunc("/product", product)
+	getRouter := r.Methods("GET").Subrouter()
+	getRouter.HandleFunc("/", home)
+	getRouter.HandleFunc("/admin", admin)
+	getRouter.HandleFunc("/admin/product/{id:[0-9]+}/update", editProduct)
+	getRouter.HandleFunc("/admin/product/create", createProduct)
+	//getRouter.HandleFunc("/admin/products", ListProducts)
+	//getRouter.HandleFunc("/admin/category", ListCategories)
+	//getRouter.HandleFunc("/admin/sales", ListSales)
+	getRouter.HandleFunc("/product/{id:[0-9]+}", seeProduct)
+	getRouter.HandleFunc("/signup", signup)
+	getRouter.HandleFunc("/signin", signin)
+
+	postRouter := r.Methods("POST").Subrouter()
+	postRouter.HandleFunc("/signup", csh.CreateCustomer)
+	postRouter.HandleFunc("/signin", sih.SignIn)
+	postRouter.HandleFunc("/admin/product/create", psh.CreateProduct)
+	//postRouter.HandleFunc("/admin/products", CreateProduct)
+	//postRouter.HandleFunc("/admin/category", CreateCategory)
+	//postRouter.HandleFunc("/sale", CreateSale)
+
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/",
 		http.FileServer(http.Dir("views/static/"))))
 	http.ListenAndServe(":3000", r)

@@ -105,6 +105,42 @@ func (cs *CustomerPSQL) Get(id uint) (*entity.Customer, error) {
 	return &c, nil
 }
 
+func (cs *CustomerPSQL) GetByEmail(email string) (*entity.Customer, error) {
+	stmt, err := cs.db.Prepare(`select id, name, email, cpf, password, 
+	created_at, updated_at from customer where email = $1`)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+	var c entity.Customer
+	rows, err := stmt.Query(email)
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		err := rows.Scan(
+			&c.ID,
+			&c.Name,
+			&c.Email,
+			&c.CPF,
+			&c.Password,
+			&c.CreatedAt,
+			&c.UpdatedAt,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("Get customer psql: %v", err)
+		}
+
+	}
+
+	// check if any customer was found
+	if c.ID == 0 {
+		return nil, fmt.Errorf("Get customer psql: customer not found")
+	}
+
+	return &c, nil
+}
+
 func (cs *CustomerPSQL) Search(query string) ([]*entity.Customer, error) {
 	stmt, err := cs.db.Prepare(`select id, name, email, cpf, password, 
 	created_at, updated_at from customer where name like $1`)

@@ -1,65 +1,32 @@
 {{ define "navbar" }}
- <header>
-     <div class="logo">
-         <a href="index.html"><img src='/static/img/logo.png'/></a>
-     </div>
-     <div class="search-box">
-         <input id="search-inputText" type="text" name="" placeholder="Seja bem-vindo, o que você busca?" required="" data-invalid="" aria-invalid="true">
-         <a class="search-btn" href="#">
-         </a>
-     </div>
-     <a href="#" class="login">
-         <div class="img-login">
-             <img src='/static/img/login.png'/>
-         </div>
-         <div class="text-login">
-             <strong>
-                 Fazer Login <br> ou Cadastrar
-             </strong>
-         </div>
-     </a>
-     <a href="carrinho.html" class="carrinho">
-         <div class="img-carrinho">
-             <img src='/static/img/carrinho.png'/>
-         </div>
-         <div class="text-carrinho">
-             <strong>
-                 Meu Carrinho <br> R$0,00
-             </strong>
-         </div>
-     </a>
-     <div class="modal-bg">
-         <form class="modal-content" action="#" method="post">
-             <div class="imgcontainer">
-                 <img src='/static/img/avatar.png' alt="avatar" class="avatar"/>
-             </div>
-             <div class="modal">
-                 <label for="uname"><b>Email</b></label>
-                 <input type="text" placeholder="Digite seu email" name="uname" required>
-                 <label for="psw"><b>Senha</b></label>
-                 <input type="password" placeholder="Digite sua senha" name="psw" required>
-                 <button class="entrar" type="submit">Entrar</button>
-                 <a class="cadastrar" href="#">Cadastrar<a>
-                 <span class="modal-close">X</span>
-             </div>
-         </form>
-     </div>
-     <div class="cadastro">
-         <form class="cadastro-content" id="cadastro-form" action="#" method="post">
-             <h2>Cadastrar no site</h2>
-             <div class="cadastro-modal">
-                 <label for="name"><b>Nome</b></label>
-                 <input type="text" placeholder="Digite seu nome" name="name" required>
-                 <label for="email"><b>Email</b></label>
-                 <input type="text" placeholder="Digite seu email" name="email" required>
-                 <label for="cpf"><b>CPF</b></label>
-                 <input type="text" placeholder="Digite seu CPF" name="estoque" required>
-                 <label for="senha"><b>Senha</b></label>
-                 <input type="password" placeholder="Digite sua senha" name="senha" required>
-                 <button class="cadastrar-btn" type="submit">Cadastrar</button>
-                 <span class="cadastro-close">X</span>
-             </div>
-         </form>
-     </div>
- </header>
+<header>
+    <div class="logo">
+        <a href="/"><img src='/static/img/logo.png'/></a>
+    </div>
+    <div class="search-box">
+        <input id="search-inputText" type="text" name="" placeholder="Seja bem-vindo, o que você busca?" required="" data-invalid="" aria-invalid="true">
+        <a class="search-btn" href="#">
+        </a>
+    </div>
+    <a href="/signin" class="home" width="200px" height="80%">
+        <div class="img-home">
+            <img src='/static/img/login.png'/>
+        </div>
+        <div class="text-home">
+            <strong>
+                Login ou </br>Cadastro
+            </strong>
+        </div>
+    </a>
+    <a href="carrinho.html" class="carrinho">
+        <div class="img-carrinho">
+            <img src='/static/img/carrinho.png'/>
+        </div>
+        <div class="text-carrinho">
+            <strong>
+                Meu Carrinho
+            </strong>
+        </div>
+    </a>
+</header>
 {{end}}

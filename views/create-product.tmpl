@@ -1,0 +1,22 @@
+{{ define "yield" }}
+<div class="new-prod">
+    <form class="new-prod-content" id="create-prod-form" action="/admin/product/create" method="POST">
+        <h2>Novo Produto</h2>
+        <div class="new-prod-modal">
+            <label for="name"><b>Nome</b></label>
+            <input type="text" name="name" id="name" placeholder="Digite seu nome" required>
+            <label for="price"><b>Preço</b></label>
+            <input type="text" name="price" id="price" placeholder="Digite o preço" required>
+            <!--<label for="category"><b>Categoria</b></label>
+            <input type="text" name="category" id="category" placeholder="Digite a categoria" required>-->
+            <p><b>Category</b></p>
+            <select name="category" id="category">
+                <option value="1">Pressao Alta</option>
+            </select>
+            <label for="stock"><b>Estoque</b></label>
+            <input type="text"  name="stock" id="stock" placeholder="Digite o estoque" required>
+            <button class="mybtn" type="submit">Criar</button>
+        </div>
+    </form>
+</div>
+{{ end }}

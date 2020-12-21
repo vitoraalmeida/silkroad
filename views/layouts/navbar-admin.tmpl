@@ -1,0 +1,32 @@
+{{ define "navbar-admin" }}
+<header>
+    <div class="logo">
+        <a href="/admin"><img src='/static/img/logo.png'/></a>
+    </div>
+    <div class="search-box">
+        <input id="search-inputText" type="text" name="" placeholder="Seja bem-vindo, o que você busca?" required="" data-invalid="" aria-invalid="true">
+        <a class="search-btn" href="#">
+        </a>
+    </div>
+    <a href="/admin/product/create" class="cadastro-prod">
+        <div class="img-cadastro">
+            <img src='/static/img/add.png'/>
+        </div>
+        <div class="text-cadastro">
+            <strong>
+                Cadastrar <br> Produto
+            </strong>
+        </div>
+    </a>
+    <a href="/admin/sales" class="pedidos">
+        <div class="img-pedidos">
+            <img src='/static/img/pedidos.png'/>
+        </div>
+        <div class="text-pedidos">
+            <strong>
+                Pedidos
+            </strong>
+        </div>
+    </a>
+</header>
+{{end}}

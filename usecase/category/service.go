@@ -1,10 +1,10 @@
 package category
 
 import (
+	"fmt"
+	"github.com/vitoraalmeida/silkroad/entity"
 	"strings"
 	"time"
-
-	"github.com/vitoraalmeida/silkroad/entity"
 )
 
 //Service category usecase
@@ -43,6 +43,7 @@ func (s *Service) GetCategory(id uint) (*entity.Category, error) {
 
 //SearchCategorys search categories
 func (s *Service) SearchCategories(query string) ([]*entity.Category, error) {
+	fmt.Println("query: ", query)
 	categories, err := s.repo.Search(strings.ToLower(query))
 	if err != nil {
 		return nil, err

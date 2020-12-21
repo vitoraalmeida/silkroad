@@ -2,7 +2,6 @@ package product
 
 import (
 	"errors"
-	"strings"
 	"time"
 
 	"github.com/vitoraalmeida/silkroad/entity"
@@ -46,7 +45,7 @@ func (s *Service) GetProduct(id uint) (*entity.Product, error) {
 
 //SearchCategorys search products
 func (s *Service) SearchProducts(query string) ([]*entity.Product, error) {
-	products, err := s.repo.Search(strings.ToLower(query))
+	products, err := s.repo.Search(query)
 	if err != nil {
 		return nil, err
 	}

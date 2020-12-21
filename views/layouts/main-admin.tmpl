@@ -1,0 +1,43 @@
+{{ define "main-admin" }}
+<!DOCTYPE html>
+<html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/login.css">
+    <title>Silk Road | Fármacia</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        {{ template "navbar-admin" }}
+        <!-- Main -->
+        <main>
+            {{ template "yield" . }}
+        </main>
+        <!-- Barra Lateral -->
+        <aside>
+            <div class="barra-lateral" id="barra">
+                <div class="titulo">
+                    <span><img src='/static/img/abc.png'/><h1 style='display:inline;'>Medicamentos</h1></span>    
+                </div>
+                <ul>
+                    <li>
+                        <a href="#">PRESSÃO ALTA</a>
+                    </li>
+                    <a href="edit-categoria.html" class="btn-img" id="01"><img src="/static/img/edit.png" class="imgedit"></a>
+                    <li class="addcategoria">
+                        <a href="nova-categoria.html" class="register-category">CADASTRAR CATEGORIA</a>
+                    </li>
+                </ul>    
+            </div>
+        </aside>
+        <!-- Footer -->
+        {{ template "footer" }}
+
+    </div>
+</body>
+</html>
+{{ end }}

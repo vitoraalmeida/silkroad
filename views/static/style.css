@@ -112,13 +112,19 @@ a {
     text-indent: 10px;
 }
 
-.img-login {
+.img-login, .img-pedidos {
     float: left;
     padding-left: 15px;
     padding-top: 45px;
 }
 
-.text-login {
+.img-home {
+    float: left;
+    padding-left: 55px;
+    padding-top: 45px;
+}
+
+.text-login, .text-pedidos {
     float: left;
     font-size: 20px;
     padding-left: 10px;
@@ -126,9 +132,23 @@ a {
     color: #006400;
 }
 
-.img-carrinho {
+.text-home {
+    float: left;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-top: 65px;
+    color: #006400;
+}
+
+.img-carrinho-f {
     float: left;
     padding-left: 15px;
+    padding-top: 45px;
+}
+
+.img-carrinho {
+    float: left;
+    padding-left: 35px;
     padding-top: 45px;
 }
 
@@ -136,104 +156,10 @@ a {
     float: left;
     font-size: 20px;
     padding-left: 10px;
-    padding-top: 55px;
+    padding-top: 65px;
     color: #006400;
 }
 /* Header - end */
-
-/* Tela Login - start */
-.modal-bg {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.5s;
-}
-
-.bg-active {
-    z-index: 999;
-    visibility: visible;
-    opacity: 1;
-}
-
-.modal {
-    padding: 16px;
-}
-
-.modal button {
-    padding: 10px 30px;
-    background-color: #2980b9;
-    color: white;
-    border: none;
-    font-size: 15px;
-    font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
-    width: 100%;
-}
-
-.modal .cadastrar {
-    position: absolute;
-    text-align: center;
-    width: 374px;
-    height: 35px;
-    border: none;
-    font-size: 15px;
-    color: white;
-    background: #2980b9;
-    font-family: 'Montserrat', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    left: 50%;
-    bottom: 25px;
-    transform: translateX(-50%);
-}
-
-.modal-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: 5px auto; 
-    border: 1px solid #888;
-    width: 30%; 
-    height: 65%;
-}
-
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.modal input[type=text], input[type=password] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-}
-  
-.imgcontainer {
-    text-align: center;
-    margin: 24px 0 12px 0;
-    position: relative;
-}
-
-img.avatar {
-    width: 30%;
-    border-radius: 50%;
-}
-/* Tela Login - end */
 
 
 .p-box {
@@ -419,21 +345,22 @@ input:focus {
     grid-template-areas: "header header" "main aside" "footer footer";
 }
 
-.cart-page {
+.cart-page, .pedidos-page {
     margin: 20px auto;
 }
 
 .cart-info {
     display: flex;
     flex-wrap: wrap;
+    font-size: 15px;
 }
 
-.cart-page table {
+.cart-page table, .pedidos-page table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.cart-page th {
+.cart-page th, .pedidos-page th {
     text-align: left;
     padding: 5px;
     color: #fff;
@@ -441,19 +368,19 @@ input:focus {
     font-weight: normal;
 }
 
-.cart-page td {
+.cart-page td, .pedidos-page th {
     padding: 10px 5px;
 }
 
 .cart-page td input {
-    width: 30px;
-    height: 20px;
+    width: 35px;
+    height: 25px;
     padding: 5px;
 }
 
 .cart-page td a {
     color: #006400;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .cart-page td img {
@@ -536,7 +463,7 @@ th:last-child {
 
 .img-cadastro {
     float: left;
-    padding-left: 15px;
+    padding-left: 25px;
     padding-top: 45px;
 }
 
@@ -547,7 +474,7 @@ th:last-child {
 
 .text-cadastro {
     float: left;
-    font-size: 17px;
+    font-size: 20px;
     padding-left: 10px;
     padding-top: 55px;
     color: #006400;
@@ -581,42 +508,33 @@ th:last-child {
     margin-top: 12px;
 }
 
-/* new product/category && cadastro */
-.new-prod, .cadastro {
-    position: fixed;
+/* new product/category */
+.new-prod, .edit-prod, .new-category, .edit-category {
     width: 100%;
     height: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
-    opacity: 0;
     transition: visibility 0s, opacity 0.5s;
 }
 
-.new-prod-content, .cadastro-content {
-    position: relative;
+.new-prod-content, .edit-prod-content, .new-category-content, .edit-category-content {
     background-color: #fefefe;
-    margin: 5px auto; 
-    border: 1px solid #888;
-    width: 40%; 
+    margin: auto; 
+    width: 60%;
 }
 
-.new-prod-content h2, .cadastro-content h2 {
+.new-prod-content h2, .edit-prod-content h2, .new-category-content h2, .edit-category-content h2 {
     padding-left: 12px;
     padding-top: 15px;
 }
 
-.new-prod-modal, .cadastro-modal {
+.new-prod-modal, .edit-prod-modal, .new-category-modal, .edit-category-modal {
     padding: 16px;
     font-family: 'Montserrat', sans-serif;
 }
 
 
-.new-prod-modal input[type=text], input[type=number], .cadastro-modal input[type=text], input[type=password], select {
+.new-prod-modal input[type=text], .new-prod-modal input[type=number], 
+.new-category-modal input[type=text], .edit-category-modal input[type=text], 
+.edit-prod-modal input[type=text], .edit-prod-modal input[type=number], select {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
@@ -625,7 +543,7 @@ th:last-child {
     box-sizing: border-box;
 }
 
-.new-prod-modal button, .cadastro-modal button {
+.new-prod-modal button, .edit-prod-modal button, .new-category-modal button, .edit-category-modal button {
     padding: 10px 30px;
     margin-top: 15px;
     background-color: #2980b9;
@@ -636,29 +554,150 @@ th:last-child {
     width: 100%;
 }
 
-.new-prod-close, .cadastro-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
-}
 
-.bg-active-prod {
-    z-index: 999;
-    visibility: visible;
-    opacity: 1;
-}
-
-.bg-active-cadastro {
-    z-index: 9999;
-    visibility: visible;
-    opacity: 1;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+/* só em alguns lugares */
+.new-prod-modal input::-webkit-outer-spin-button, .new-prod-modal input::-webkit-inner-spin-button,
+.edit-prod-modal input::-webkit-outer-spin-button, .edit-prod-modal input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.addcategoria a {
+    color: #000000; 
+    font-size: 15px;
+}
+
+.container-pedidos {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: 20vh 90vh 35vh;
+    grid-gap: 10px;
+    grid-template-areas: "header header" "main main" "footer footer";
+}
+
+
+.login-bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-m {
+    padding: 16px;
+}
+
+.login-m button {
+    padding: 10px 30px;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    font-size: 15px;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    width: 100%;
+}
+
+.login-m .cadastrar {
+    position: absolute;
+    text-align: center;
+    width: 92%;
+    height: 35px;
+    border: none;
+    font-size: 15px;
+    color: white;
+    background: #2980b9;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    left: 50%;
+    bottom: 25px;
+    transform: translateX(-50%);
+}
+
+.login-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 5px auto; 
+    border: 1px solid #888;
+    width: 30%; 
+    height: 65%;
+}
+
+.login-m input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+  
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+    position: relative;
+}
+
+img.avatar {
+    width: 30%;
+    border-radius: 50%;
+}
+
+/* Cadastro */
+.cadastro {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: visibility 0s, opacity 0.5s;
+}
+
+.cadastro-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: 5px auto; 
+    border: 1px solid #888;
+    width: 40%; 
+}
+
+.cadastro-content h2 {
+    padding-left: 12px;
+    padding-top: 15px;
+}
+
+.cadastro-modal {
+    padding: 16px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.cadastro-modal input[type=text], .cadastro-modal input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.cadastro-modal button {
+    padding: 10px 30px;
+    margin-top: 15px;
+    background-color: #2980b9;
+    color: white;
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    width: 100%;
 }
