@@ -18,14 +18,15 @@ import (
 
 	"github.com/vitoraalmeida/silkroad/infra/repository"
 	"github.com/vitoraalmeida/silkroad/usecase/category"
-	_ "github.com/vitoraalmeida/silkroad/usecase/checkout"
 	"github.com/vitoraalmeida/silkroad/usecase/customer"
-	_ "github.com/vitoraalmeida/silkroad/usecase/delivery"
 	"github.com/vitoraalmeida/silkroad/usecase/product"
-	_ "github.com/vitoraalmeida/silkroad/usecase/sale"
-	_ "github.com/vitoraalmeida/silkroad/usecase/saleitem"
 	"github.com/vitoraalmeida/silkroad/views"
-)
+	/*
+		"github.com/vitoraalmeida/silkroad/usecase/checkout"
+		"github.com/vitoraalmeida/silkroad/usecase/delivery"
+		"github.com/vitoraalmeida/silkroad/usecase/sale"
+		"github.com/vitoraalmeida/silkroad/usecase/saleitem"
+	*/)
 
 var (
 	productService     *product.Service
@@ -139,15 +140,18 @@ func main() {
 	//// category
 	cr := repository.NewCategoryPQSL(db)
 	cs := category.NewService(cr)
+
+	//cria categoria
+	cid, _ := cs.CreateCategory("Pressão Alta")
+	log.Println(cid)
 	ch := handler.NewCategories(l, cs)
+
 	// product
 	pr := repository.NewProductPQSL(db)
 	ps := product.NewService(pr)
 	productService = ps
 	psh := handler.NewProducts(l, ps, cs)
-	//// sale
-	//sr := repository.NewSalePQSL(db)
-	//ss := sale.NewService(sr)
+
 	// customer
 	csr := repository.NewCustomerPQSL(db)
 	css := customer.NewService(csr)
@@ -156,14 +160,27 @@ func main() {
 	// signin handler
 	sih := handler.NewSignIn(l, css)
 
-	//// saleitem
-	//sir := repository.NewSaleItemPQSL(db)
-	//sis := saleitem.NewService(sir)
-	//// delivery
-	//dr := repository.NewDeliveryPSQL(db)
-	//ds := delivery.NewService(dr)
-	//// checkout
-	//chs := checkout.NewService(ss, sis, css, ps, ds)
+	// descomentar para o checkout
+	/*
+
+		// sale
+		sr := repository.NewSalePQSL(db)
+		ss := sale.NewService(sr)
+		// saleitem
+		sir := repository.NewSaleItemPQSL(db)
+		sis := saleitem.NewService(sir)
+		// delivery
+		dr := repository.NewDeliveryPSQL(db)
+		ds := delivery.NewService(dr)
+		// checkout
+		chs := checkout.NewService(ss, sis, css, ps, ds)
+
+		ci1 := checkout.CartItem{1, 3, 33.33}
+		ci2 := checkout.CartItem{2, 2, 88.88}
+		c1 := checkout.Cart{ci1, ci2}
+		err = chs.Checkout(&c1, 1)
+
+	*/
 
 	homeView = views.NewView("main", "views/home.tmpl")
 	productView = views.NewView("main", "views/product.tmpl")
